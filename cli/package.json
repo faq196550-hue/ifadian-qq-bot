@@ -1,0 +1,10 @@
+{
+  "name": "ifdian-order-checker",
+  "version": "0.1.0",
+  "description": "查询爱发电订单号是否存在的 CLI 工具",
+  "type": "module",
+  "main": "ifdian.js",
+  "bin": {
+    "ifdian-check": "cli.js"
+  }
+}

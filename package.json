@@ -1,0 +1,13 @@
+{
+  "name": "afdian-qq-bot",
+  "version": "1.0.0",
+  "description": "爱发电赞助者订单查询 & QQ 群自动审批机器人",
+  "type": "module",
+  "scripts": {
+    "check": "node src/cli.js",
+    "bot": "node src/bot.js"
+  },
+  "dependencies": {
+    "ws": "^8.0.0"
+  }
+}

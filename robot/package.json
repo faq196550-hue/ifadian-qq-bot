@@ -1,0 +1,10 @@
+{
+  "name": "afdian-qq-bot",
+  "version": "0.1.0",
+  "description": "爱发电赞助者群 QQ 机器人 - 自动审批入群请求",
+  "type": "module",
+  "main": "bot.js",
+  "dependencies": {
+    "ws": "^8.21.0"
+  }
+}
