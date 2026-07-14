@@ -10,7 +10,7 @@
 
 **NapCat** 是 QQ 机器人底层框架，本项目通过 NapCat 的 OneBot v11 WebSocket 接口监听和处理加群请求。
 
-- 下载：[NapCat GitHub Releases](https://github.com/NapNeko/NapCat/releases)
+- 下载：[NapCat GitHub Releases](https://github.com/NapNeko/NapCatQQ/releases)
 - NapCat 需要**先启动并登录 QQ 账号**，才可启动本审批机器人
 - OneBot v11 WebSocket 端口默认 **3001**，详见下方 NapCat 配置说明
 
