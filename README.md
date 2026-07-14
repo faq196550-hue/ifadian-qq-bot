@@ -12,27 +12,52 @@
 
 - 下载：[NapCat GitHub Releases](https://github.com/NapNeko/NapCat/releases)
 - NapCat 需要**先启动并登录 QQ 账号**，才可启动本审批机器人
-- NapCat 的 OneBot v11 WebSocket 配置详见下方说明
+- OneBot v11 WebSocket 端口默认 **3001**，详见下方 NapCat 配置说明
+
+### Node.js
+
+| 平台 | 版本要求 |
+|------|----------|
+| Windows | Node.js 18+ |
+| Linux   | Node.js 18+ |
 
 ---
 
 ## 快速开始
 
-```bash
-cd afdian-qq-bot
+### Windows
 
-:: 复制并填写配置
+```bash
+cd work\afdian-qq-bot
+
+:: 复制配置文件
 copy config.example.json config.json
 
 :: 启动菜单
 start.bat
-```
 
-也可以直接传参：
-
-```bash
+:: 或直接传参
 start.bat check <订单号>
 start.bat bot <群号>
+```
+
+### Linux
+
+```bash
+cd work/afdian-qq-bot
+
+# 添加执行权限
+chmod +x start.sh
+
+# 复制配置文件
+cp config.example.json config.json
+
+# 启动菜单
+./start.sh
+
+# 或直接传参
+./start.sh check <订单号>
+./start.sh bot <群号>
 ```
 
 ---
@@ -43,33 +68,30 @@ start.bat bot <群号>
 afdian-qq-bot/
 ├── README.md               # 本文档
 ├── package.json             # 项目配置
-├── start.bat                # 统一启动脚本（菜单 / 命令行）
+├── start.bat                # Windows 启动脚本
+├── start.sh                 # Linux 启动脚本
 ├── config.example.json      # 配置模板
 ├── config.json              # 你的配置（需创建）
 ├── history.json             # 审批记录（自动生成）
-│
-├── src/                     # 整合版源码（推荐使用）
+├── src/                     # 整合版源码
 │   ├── ifdian.js            # 爱发电 API 核心模块
 │   ├── cli.js               # 订单查询命令行
 │   └── bot.js               # QQ 群审批机器人
-│
-├── cli/                     # 独立 CLI 工具（原 afdian-tool）
+├── cli/                     # 独立 CLI 工具
 │   ├── ifdian.js
 │   ├── cli.js
 │   ├── config.json
 │   └── package.json
-│
-├── robot/                   # 独立机器人（原 qq-bot）
+├── robot/                   # 独立机器人
 │   ├── bot.js
 │   ├── config.json
 │   ├── history.json
 │   └── package.json
-│
 └── node_modules/            # 依赖（npm install 自动安装）
 ```
 
-> `src/` 是整合版，由 `start.bat` 统一管理。
-> `cli/` 和 `robot/` 是迁移过来的独立版本，可以直接 `node cli/cli.js` 或 `node robot/bot.js` 单独运行。
+> `src/` 是整合版，由 `start.bat` / `start.sh` 统一管理。
+> `cli/` 和 `robot/` 可独立运行。
 
 ---
 
@@ -86,8 +108,8 @@ afdian-qq-bot/
 ```json
 {
   "ifdian": {
-    "user_id": "47db5ff000fd11ecbc4752540025c377",
-    "token": "Bjbw7Y9CAfKWkmexgatHps5UvduM8G6r"
+    "user_id": "填写你的 user_id",
+    "token": "填写你的 api token"
   },
   "napcat": {
     "wsUrl": "ws://localhost:3001"
@@ -97,7 +119,9 @@ afdian-qq-bot/
 
 ---
 
-## start.bat 启动脚本
+## 启动脚本
+
+### Windows: start.bat
 
 | 命令 | 说明 |
 |------|------|
@@ -108,12 +132,27 @@ afdian-qq-bot/
 
 首次启动自动 `npm install`。
 
+### Linux: start.sh
+
+| 命令 | 说明 |
+|------|------|
+| `./start.sh` | 交互式菜单 |
+| `./start.sh check <订单号>` | 查询订单 |
+| `./start.sh bot <群号>` | 启动审批机器人 |
+| `./start.sh help` | 帮助 |
+
+首次运行需添加执行权限：`chmod +x start.sh`
+
 ---
 
 ## 1. 订单查询
 
 ```bash
+# Windows
 start.bat check 20260712140309100485413171
+
+# Linux
+./start.sh check 20260712140309100485413171
 ```
 
 或直接用 node：
@@ -141,10 +180,9 @@ const result = await queryOrder(user_id, token, orderNo);
 
 ### NapCat 配置
 
-NapCat 需已登录并开启 OneBot v11 WebSocket：
+NapCat 需已登录并开启 OneBot v11 WebSocket。编辑 NapCat 目录下的 `config/onebot11_<QQ号>.json`：
 
 ```json
-// config/onebot11_<QQ号>.json
 {
   "network": {
     "websocketServers": [
@@ -154,15 +192,19 @@ NapCat 需已登录并开启 OneBot v11 WebSocket：
 }
 ```
 
-配置后重启 NapCat，日志显示：`WebSocket 服务器已启动: ws://0.0.0.0:3001`
+配置后**重启 NapCat**，日志应显示 WebSocket 服务器已启动。
 
-WebUI 管理面板：[http://localhost:6099](http://localhost:6099)
-
-### 启动
+### 启动机器人
 
 ```bash
+# Windows
 start.bat bot 123456789
+
+# Linux
+./start.sh bot 123456789
 ```
+
+不传群号时可通过交互菜单输入。
 
 ### 首次启动
 
@@ -179,7 +221,7 @@ start.bat bot 123456789
 | 订单不存在 | 拒绝：不存在 |
 | API 异常 | 拒绝：验证失败请重试 |
 
-订单号提取：从留言中取第一串 ≥10 位的连续数字。
+订单号提取：从留言中取第一串 10 位以上的连续数字。
 
 ### 历史记录
 
@@ -225,6 +267,8 @@ start.bat bot 123456789
 
 检查 `config/onebot11_<QQ号>.json` 中 `websocketServers` 是否配置，NapCat 是否重启。
 
+NapCat WebUI 管理面板：http://localhost:6099（Windows） / 查看 NapCat 日志确认地址。
+
 **显示"配置错误"？**
 
 确认 `config.json` 在项目根目录且已填写正确的 `user_id` 和 `token`。
@@ -244,5 +288,4 @@ start.bat bot 123456789
 
 ---
 
-*最后更新: 2026-07-14*
-
+*最后更新: 2026-07-15*
